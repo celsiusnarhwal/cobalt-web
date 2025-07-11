@@ -1,0 +1,42 @@
+name: Deploy Site
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone imputnet/cobalt
+        run: gh repo clone imputnet/cobalt
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Set Up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: cobalt/package.json
+
+      - name: Build Site
+        run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
+        working-directory: cobalt/web
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: cobalt/web/build
+
+  deploy:
+    name: Deploy Site
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
