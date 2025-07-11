@@ -24,6 +24,9 @@ jobs:
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
         working-directory: cobalt/web
+        env:
+          WEB_DEFAULT_API: https://api.cobalt.seika.computer
+          WEB_HOST: https://cobalt.seika.computer
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
