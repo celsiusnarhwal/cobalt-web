@@ -14,11 +14,25 @@ jobs:
   build:
     name: Build Site
     runs-on: ubuntu-latest
+    env:
+      API_URL: https://api.cobalt.seika.computer
     steps:
-      - name: Clone imputnet/cobalt
-        run: gh repo clone imputnet/cobalt
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github-actions
+
+      - name: Get API Commit
+        id: commit
+        run: echo "commit=$(curl ${{ env.API_URL }} | jq -r .git.commit)" >> ${GITHUB_OUTPUT}
+
+      - name: Clone Cobalt Repo
+        uses: actions/checkout@v4
+        with:
+          repository: imputnet/cobalt
+          ref: ${{ steps.commit.outputs.commit }}
+          path: cobalt
 
       - name: Set Up pnpm
         uses: pnpm/action-setup@v4
@@ -29,7 +43,7 @@ jobs:
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
         working-directory: cobalt/web
         env:
-          WEB_DEFAULT_API: https://api.cobalt.seika.computer
+          WEB_DEFAULT_API: ${{ env.API_URL }}
           WEB_HOST: https://cobalt.seika.computer
 
       - name: Upload Artifact
