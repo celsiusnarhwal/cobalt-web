@@ -25,7 +25,7 @@ jobs:
 
       - name: Get API Commit
         id: commit
-        run: echo "commit=$(curl ${{ env.API_URL }} | jq -r .git.commit)" >> ${GITHUB_OUTPUT}
+        run: echo "commit=$(curl -fsSL --retry 5 --retry-delay 5 ${{ env.API_URL }} | jq -r .git.commit)" >> ${GITHUB_OUTPUT}
 
       - name: Clone Cobalt Repo
         uses: actions/checkout@v4
