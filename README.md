@@ -1,1 +1,1 @@
-This repository hosts the build instructions for my personal [Cobalt](https://github.com/imputnet/cobalt) frontend, which for technical reasons is publicly accessible, but is tied to a backend gated behind a VPN that is only accessible to me. There's nothing to see here for you.
+This repository hosts the build instructions for my personal [Cobalt](https://github.com/imputnet/cobalt) frontend, which for technical reasons is publicly accessible, but is tied to a backend gated behind a VPN that is only accessible to me. There's nothing for you to see here.
