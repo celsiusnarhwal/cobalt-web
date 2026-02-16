@@ -26,7 +26,9 @@ jobs:
       - name: Get API Commit
         id: commit
         shell: bash -e -o pipefail {0}
-        run: echo "commit=$(curl -fsSL --retry 5 --retry-delay 5 ${{ env.API_URL }} | jq -r .git.commit)" >> ${GITHUB_OUTPUT}
+        run: |
+          commit=$(curl -fsSL --retry 5 --retry-delay 5 ${{ env.API_URL }} | jq -r .git.commit)
+          echo "commit=${commit}" >> ${GITHUB_OUTPUT}
 
       - name: Clone imputnet/cobalt
         uses: actions/checkout@v4
