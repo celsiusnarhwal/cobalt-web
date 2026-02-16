@@ -6,10 +6,6 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  pages: write
-
 jobs:
   build:
     name: Build Site
@@ -57,6 +53,9 @@ jobs:
     name: Deploy Site
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
