@@ -21,7 +21,7 @@ jobs:
 
       - name: Get API Commit
         id: commit
-        shell: bash -e -o pipefail {0}
+        shell: bash -e -o pipefail
         run: |
           commit=$(curl -fsSL --retry 5 --retry-delay 5 ${{ env.API_URL }} | jq -r .git.commit)
           echo "commit=${commit}" >> ${GITHUB_OUTPUT}
