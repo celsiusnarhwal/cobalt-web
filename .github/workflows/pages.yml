@@ -32,16 +32,15 @@ jobs:
         with:
           repository: imputnet/cobalt
           ref: ${{ steps.commit.outputs.commit }}
-          path: cobalt
 
       - name: Set Up pnpm
         uses: pnpm/action-setup@v4
         with:
-          package_json_file: cobalt/package.json
+          package_json_file: package.json
 
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
-        working-directory: cobalt/web
+        working-directory: web
         env:
           WEB_DEFAULT_API: ${{ env.API_URL }}
           WEB_HOST: https://cobalt.seika.computer
@@ -49,7 +48,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: cobalt/web/build
+          path: web/build
 
   deploy:
     name: Deploy Site
