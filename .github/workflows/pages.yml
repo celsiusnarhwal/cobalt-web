@@ -27,7 +27,7 @@ jobs:
         id: commit
         run: |
           commit=$(curl -fsSL --retry 5 --retry-delay 5 ${{ env.API_URL }} || exit 1 | jq -r .git.commit)
-          echo "commit=$(commit)" >> ${GITHUB_OUTPUT}
+          echo $commit >> ${GITHUB_OUTPUT}
 
       - name: Clone imputnet/cobalt
         uses: actions/checkout@v4
