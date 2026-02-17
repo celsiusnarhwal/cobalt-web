@@ -18,6 +18,8 @@ jobs:
         with:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:github-actions
+          args: --accept-dns=false
+          ping: seika
 
       - name: Get API Commit
         id: commit
