@@ -41,6 +41,7 @@ jobs:
         uses: endevco/aube-action@v1
         with:
           node-version: auto
+          working-directory: web
 
       - name: Build Site
         run: aube install --filter @imput/cobalt-web && aube build --filter @imput/cobalt-web
