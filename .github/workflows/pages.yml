@@ -37,13 +37,13 @@ jobs:
           repository: imputnet/cobalt
           ref: ${{ steps.commit.outputs.commit }}
 
-      - name: Set Up pnpm
-        uses: pnpm/action-setup@v4
+      - name: Set Up aube
+        uses: endevco/aube-action@v1
         with:
-          package_json_file: package.json
+          node-version: auto
 
       - name: Build Site
-        run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
+        run: aube install --filter @imput/cobalt-web && aube build --filter @imput/cobalt-web
         working-directory: web
         env:
           WEB_DEFAULT_API: ${{ env.API_URL }}
