@@ -40,6 +40,9 @@ jobs:
       - name: Set Up aube
         uses: endevco/aube-action@v1
 
+      - name: Disable trustPolicy
+        run: echo "trustPolicy = off" >> .npmrc
+
       - name: Build Site
         run: aube install --filter @imput/cobalt-web && aube build --filter @imput/cobalt-web
         working-directory: web
