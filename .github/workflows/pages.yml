@@ -33,7 +33,7 @@ jobs:
           echo "commit=${commit}" >> ${GITHUB_OUTPUT}
 
       - name: Clone imputnet/cobalt
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: imputnet/cobalt
           ref: ${{ steps.commit.outputs.commit }}
