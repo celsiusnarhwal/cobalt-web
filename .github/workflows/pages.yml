@@ -44,23 +44,21 @@ jobs:
       - name: Compile Custom CSS
         run: | 
           curl -fsSL https://raw.githubusercontent.com/catppuccin/userstyles/refs/heads/main/styles/cobalt/catppuccin.user.less \
-          | pnpx less --global-var="lightFlavor=latte" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - catppuccin.css
-        working-directory: web/src
+          | pnpx less --global-var="lightFlavor=latte" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - web/static/catppuccin.css
 
       - name: Inject Custom CSS
         shell: python
         run: |
           from pathlib import Path
 
-          css_file = Path("catppuccin.css")
+          css_file = Path("web/static/catppuccin.css")
           css_file.write_text(css_file.read_text().replace('@-moz-document domain("cobalt.tools") {', "", 1)[::-1].replace("}", "", 1)[::-1])
           
-          app_html = Path("app.html")
-          app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="{css_file.resolve()}"></head>'))
+          app_html = Path("web/src/app.html")
+          app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))
 
           print(css_file.read_text())
-          print(app_html.read_text())
-        working-directory: web/src        
+          print(app_html.read_text())      
           
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
