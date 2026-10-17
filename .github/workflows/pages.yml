@@ -55,10 +55,7 @@ jobs:
           css_file.write_text(css_file.read_text().replace('@-moz-document domain("cobalt.tools") {', "", 1)[::-1].replace("}", "", 1)[::-1])
           
           app_html = Path("web/src/app.html")
-          app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))
-
-          print(css_file.read_text())
-          print(app_html.read_text())      
+          app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))     
           
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
