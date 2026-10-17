@@ -57,7 +57,7 @@ jobs:
           css_file.write_text(css_file.read_text().replace('@-moz-document domain("cobalt.tools") {', "", 1)[::-1].replace("}", "", 1)[::-1])
           
           layout_file = Path("routes/+layout.svelte")
-          layout_file.write_text(layout_file.read_text().replace("import", f"import {css_file.resolve()}\nimport", 1))
+          layout_file.write_text(layout_file.read_text().replace("import", f'import "{css_file.resolve()}"\nimport', 1))
 
           print(css_file.read_text())
           print(layout_file.read_text())
