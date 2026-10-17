@@ -57,7 +57,7 @@ jobs:
           app_html = Path("web/src/app.html")
           app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))
 
-          theme_file = Path("web/src/lb/state/theme.ts")
+          theme_file = Path("web/src/lib/state/theme.ts")
           theme_file.write_text(theme_file.read_text().replace("#000000", "#1e1e2e").replace("#ffffff", "#eff1f5"))
           
       - name: Build Site
