@@ -26,3 +26,13 @@ html:has(#body-light),
     border-top: env(safe-area-inset-top) solid var(--primary);
   }
 }
+
+#cobalt[data-theme] {
+  --sidebar-mobile-gradient: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sidebar-bg) 90%, transparent) 0%,
+    transparent 5%,
+    transparent 95%,
+    color-mix(in srgb, var(--sidebar-bg) 90%, transparent) 100%
+  );
+}
