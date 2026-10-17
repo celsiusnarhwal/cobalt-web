@@ -38,14 +38,11 @@ jobs:
           repository: imputnet/cobalt
           ref: ${{ steps.commit.outputs.commit }}
 
-      - name: Set Up aube
-        uses: endevco/aube-action@v1
-
-      - name: Disable trustPolicy
-        run: echo "trustPolicy = off" >> .npmrc
+      - name: Set Up pnpm
+        uses: pnpm/action-setup@v6
 
       - name: Build Site
-        run: aube install --filter @imput/cobalt-web && aube build --filter @imput/cobalt-web
+        run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
         working-directory: web
         env:
           WEB_DEFAULT_API: ${{ env.API_URL }}
