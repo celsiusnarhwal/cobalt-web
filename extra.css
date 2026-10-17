@@ -1,6 +1,23 @@
 html,
 body {
-  background-color: var(--sidebar-bg);
+  background-color: #181825 !important;
+}
+
+@media (prefers-color-scheme: light) {
+  html,
+  body {
+    background-color: #e6e9ef !important;
+  }
+}
+
+html:has(#body-dark),
+#body-dark {
+  background-color: #181825 !important;
+}
+
+html:has(#body-light),
+#body-light {
+  background-color: #e6e9ef !important;
 }
 
 @media screen and (max-width: 535px) {
