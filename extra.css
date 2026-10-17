@@ -36,3 +36,10 @@ html:has(#body-light),
     color-mix(in srgb, var(--sidebar-bg) 90%, transparent) 100%
   );
 }
+
+@media screen and (max-width: 535px) {
+  #cobalt #content {
+    padding-top: 0;
+    border-top: env(safe-area-inset-top) solid var(--primary);
+  }
+}
