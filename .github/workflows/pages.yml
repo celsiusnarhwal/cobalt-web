@@ -50,7 +50,6 @@ jobs:
       - name: Inject Custom CSS
         shell: python
         run: |
-          import re
           from pathlib import Path
 
           css_file = Path("catppuccin.css")
@@ -60,7 +59,7 @@ jobs:
           app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="{css_file.resolve()}"></head>'))
 
           print(css_file.read_text())
-          print(layout_file.read_text())
+          print(app_html.read_text())
         working-directory: web/src        
           
       - name: Build Site
