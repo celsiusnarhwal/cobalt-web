@@ -32,11 +32,15 @@ jobs:
           commit=$(curl -fsSL --retry 5 --retry-delay 5 ${{ env.API_URL }} | jq -r .git.commit)
           echo "commit=${commit}" >> ${GITHUB_OUTPUT}
 
-      - name: Clone imputnet/cobalt
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v7
+
+      - name: Checkout imputnet/cobalt
         uses: actions/checkout@v7
         with:
           repository: imputnet/cobalt
           ref: ${{ steps.commit.outputs.commit }}
+          path: cobalt
 
       - name: Set Up pnpm
         uses: pnpm/action-setup@v6
@@ -44,25 +48,28 @@ jobs:
       - name: Compile Custom CSS
         run: | 
           curl -fsSL https://raw.githubusercontent.com/catppuccin/userstyles/refs/heads/main/styles/cobalt/catppuccin.user.less \
-          | pnpx less --global-var="lightFlavor=latte" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - web/static/catppuccin.css
+          | pnpx less --global-var="lightFlavor=latte" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - cobalt/web/static/catppuccin.css
 
       - name: Inject Custom CSS
         shell: python
         run: |
           from pathlib import Path
 
-          css_file = Path("web/static/catppuccin.css")
+          Path("${{ github.workspace }}/extra.css").replace("static/extra.css")
+          
+          css_file = Path("static/catppuccin.css")
           css_file.write_text(css_file.read_text().replace('@-moz-document domain("cobalt.tools") {', "", 1)[::-1].replace("}", "", 1)[::-1])
           
-          app_html = Path("web/src/app.html")
-          app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))
+          app_html = Path("src/app.html")
+          app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"><link rel="stylesheet" href="%sveltekit.assets%/extra.css"></head>'))
 
-          theme_file = Path("web/src/lib/state/theme.ts")
+          theme_file = Path("src/lib/state/theme.ts")
           theme_file.write_text(theme_file.read_text().replace("#000000", "#1e1e2e").replace("#ffffff", "#eff1f5"))
-          
+        working-directory: cobalt/web
+        
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
-        working-directory: web
+        working-directory: cobalt/web
         env:
           WEB_DEFAULT_API: ${{ env.API_URL }}
           WEB_HOST: https://cobalt.seika.computer
@@ -70,7 +77,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: web/build
+          path: cobalt/web/build
 
   deploy:
     name: Deploy Site
