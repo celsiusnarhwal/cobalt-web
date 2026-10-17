@@ -42,14 +42,18 @@ jobs:
         with:
           repository: imputnet/cobalt
           ref: ${{ steps.commit.outputs.commit }}
+          path: cobalt
 
       - name: Set Up pnpm
         uses: pnpm/action-setup@v6
+        with:
+          package_json_file: cobalt/package.json
+
 
       - name: Compile Custom CSS
         run: | 
           curl -fsSL https://raw.githubusercontent.com/catppuccin/userstyles/refs/heads/main/styles/cobalt/catppuccin.user.less \
-          | pnpx less --global-var="lightFlavor=latte" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - web/static/catppuccin.css
+          | pnpx less --global-var="lightFlavor=latte" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - cobalt/web/static/catppuccin.css
 
       - name: Inject Custom CSS
         shell: python
@@ -66,11 +70,11 @@ jobs:
 
           theme_file = Path("src/lib/state/theme.ts")
           theme_file.write_text(theme_file.read_text().replace("#000000", "#1e1e2e").replace("#ffffff", "#eff1f5"))
-        working-directory: web
+        working-directory: cobalt/web
         
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
-        working-directory: web
+        working-directory: cobalt/web
         env:
           WEB_DEFAULT_API: ${{ env.API_URL }}
           WEB_HOST: https://cobalt.seika.computer
