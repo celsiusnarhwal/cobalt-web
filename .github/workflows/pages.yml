@@ -47,7 +47,7 @@ jobs:
       - name: Compile Custom CSS
         run: | 
           curl -fsSL https://raw.githubusercontent.com/catppuccin/userstyles/refs/heads/main/styles/cobalt/catppuccin.user.less \
-          | pnpx --package=less lessc --global-var="lightFlavor=late" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - catppuccin.css
+          | pnpx less --global-var="lightFlavor=late" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - catppuccin.css
         working-directory: web/src
 
       - name: Inject Custom CSS
