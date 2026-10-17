@@ -47,22 +47,20 @@ jobs:
       - name: Compile Custom CSS
         run: | 
           curl -fsSL https://raw.githubusercontent.com/catppuccin/userstyles/refs/heads/main/styles/cobalt/catppuccin.user.less \
-          | npx lessc --global-var="lightFlavor=late" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - catppuccin.css
+          | pnpx --package=less lessc --global-var="lightFlavor=late" --global-var="darkFlavor=mocha" --global-var="accentColor=mauve" - catppuccin.css
         working-directory: web/src
 
       - name: Inject Custom CSS
         shell: uvx xonsh {0}
         run: |
+          import re
           from pathlib import Path
 
+          css_file = Path("catppuccin.css")
+          css_file.write_text(css_file.read_text().replace('@-moz-document domain("cobalt.tools") {', "", 1)[::-1].replace("}", "", 1)[::-1])
+          
           layout_file = Path("routes/+layout.svelte")
-
-          layout_lines = layout_file.read_text().splitlines()
-          import_index = next(index for index, i in enumerate(layout_lines) if i.strip().startswith("import")
-
-          layout_lines.insert(import_index, "../catppuccin.css")
-
-          layout_file.write_text("\n".join(layout_lines))
+          layout_file.write_text(layout_file.read_text().replace("import", f"import {css_file.realpath()}\nimport", 1))
         working-directory: web/src        
           
 
