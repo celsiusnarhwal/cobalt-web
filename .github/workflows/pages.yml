@@ -52,7 +52,7 @@ jobs:
           from pathlib import Path
 
           css_file = Path("web/static/catppuccin.css")
-          css_file.write_text(css_file.read_text().replace('@-moz-document domain("cobalt.tools")', "@media (display-mode: browser)", 1)[::-1].replace("}", "", 1)[::-1])
+          css_file.write_text(css_file.read_text().replace('@-moz-document domain("cobalt.tools")', "@media (display-mode: browser) and (hover: hover) and (pointer: fine)", 1)[::-1].replace("}", "", 1)[::-1])
           
           app_html = Path("web/src/app.html")
           app_html.write_text(app_html.read_text().replace("</head>", f'<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))     
