@@ -40,8 +40,6 @@ jobs:
 
       - name: Set Up pnpm
         uses: pnpm/action-setup@v6
-        with:
-          package_json_file: cobalt/package.json
 
       - name: Download Custom CSS
         run: curl -fsSL https://catppuccin.seika.computer/catppuccin/css/cobalt.css -o web/static/catppuccin.css
