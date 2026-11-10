@@ -32,17 +32,11 @@ jobs:
           commit=$(curl -fsSL --retry 5 --retry-delay 5 ${{ env.API_URL }} | jq -r .git.commit)
           echo "commit=${commit}" >> ${GITHUB_OUTPUT}
 
-      - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v7
-        with:
-          path: workspace
-
       - name: Checkout imputnet/cobalt
         uses: actions/checkout@v7
         with:
           repository: imputnet/cobalt
           ref: ${{ steps.commit.outputs.commit }}
-          path: cobalt
 
       - name: Set Up pnpm
         uses: pnpm/action-setup@v6
@@ -50,19 +44,19 @@ jobs:
           package_json_file: cobalt/package.json
 
       - name: Download Custom CSS
-        run: curl -fsSL https://catppuccin.seika.computer/catppuccin/css/cobalt.css -o cobalt/web/static/catppuccin.css
+        run: curl -fsSL https://catppuccin.seika.computer/catppuccin/css/cobalt.css -o web/static/catppuccin.css
 
       - name: Inject Custom CSS
         shell: python
         run: |
           from pathlib import Path
           
-          app_html = Path("cobalt/web/src/app.html")
+          app_html = Path("web/src/app.html")
           app_html.write_text(app_html.read_text().replace("</head>", '<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))
         
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
-        working-directory: cobalt/web
+        working-directory: web
         env:
           WEB_DEFAULT_API: ${{ env.API_URL }}
           WEB_HOST: https://cobalt.seika.computer
@@ -70,7 +64,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: cobalt/web/build
+          path: web/build
 
   deploy:
     name: Deploy Site
