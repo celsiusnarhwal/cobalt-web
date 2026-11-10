@@ -57,9 +57,8 @@ jobs:
         run: |
           from pathlib import Path
           
-          app_html = Path("src/app.html")
+          app_html = Path("cobalt/web/src/app.html")
           app_html.write_text(app_html.read_text().replace("</head>", '<link rel="stylesheet" href="%sveltekit.assets%/catppuccin.css"></head>'))
-        working-directory: cobalt/web
         
       - name: Build Site
         run: pnpm install --filter @imput/cobalt-web && pnpm build --filter @imput/cobalt-web
